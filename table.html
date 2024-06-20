@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <title>Table</title>
+  <style>
+    table, th, td {
+       background-color: var(--bs-border-color);
+      text-align: center;
+      margin-top: 60px;
+      margin-bottom: 30px;
+      }
+    th, td {
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5">
+    <h2 class="cls">Table</h2>
+    <table class="table table-bordered text-align-center">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Date of Birth</th>
+          <th>Email</th>
+          <th>Password</th>
+          <th>Mobile No</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="userTableBody"></tbody>
+    </table>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const userTableBody = document.getElementById('userTableBody');
+      const users = JSON.parse(localStorage.getItem('users')) || [];
+
+      function renderUsers() {
+        userTableBody.innerHTML = '';
+        users.forEach(function(user) {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.date}</td>
+            <td>${user.email}</td>
+            <td>${user.password}</td>
+            <td>${user.mobile}</td>
+            <td>${user.age}</td>
+            <td>${user.gender}</td>
+            <td>${user.role}</td>
+            <td>
+              <button onclick="editUser(${user.id})" class="btn btn-success m-1">Edit</button>
+              <button onclick="deleteUser(${user.id})" class="btn btn-danger">Delete</button>
+            </td>
+          `;
+          userTableBody.appendChild(row);
+        });
+      }
+
+      function saveToLocalStorage() {
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+
+      window.editUser = function(id)
+ {
+        window.location.href = `Form.html?id=${id}`;
+      }
+
+      window.deleteUser = function(id)
+ {
+        const userIndex = users.findIndex(user => user.id === id);
+        if (userIndex !== -1) {
+          users.splice(userIndex, 1);
+          saveToLocalStorage();
+          renderUsers();
+        }
+      }
+
+      renderUsers();
+    });
+  </script>
+</body>
+</html>
